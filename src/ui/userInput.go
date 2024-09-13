@@ -15,8 +15,10 @@ func UserInterface(client *youtube.Client) {
 	options := InputUserOption()
 	switch options {
 	case 1:
+		fmt.Println("Digite sua url:")
 		handleDownloadSingleVideo(client)
 	case 2:
+		fmt.Println("Digite sua url:")
 		handleDownloadPlaylist(client)
 	default:
 		fmt.Println("Invalid option")
