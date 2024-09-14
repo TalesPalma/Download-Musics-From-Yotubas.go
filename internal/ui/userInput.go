@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	youtubev2services "github.com/TalesPalma/src/youtubev2Services"
+	youtubev2services "github.com/TalesPalma/internal/youtubev2Services"
 	"github.com/kkdai/youtube/v2"
 )
 
