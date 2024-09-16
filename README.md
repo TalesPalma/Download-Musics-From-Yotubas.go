@@ -1,5 +1,3 @@
-# Donwload musics from youtube
-
 # Download músicas do YouTube
 
 Este é um aplicativo em Go que permite baixar músicas do YouTube. Siga as instruções abaixo para configurar e usar o aplicativo.
