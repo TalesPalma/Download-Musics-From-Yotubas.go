@@ -57,7 +57,7 @@ func saveVideoMp3(video *youtube.Video, response io.ReadCloser) {
 		log.Fatalf("Error with read file : %v", err)
 	}
 
-	converters.ConvertMp4ToMp3(fileName) // Convert the mp4 file to mp3 using ffmpeg
+	go converters.ConvertMp4ToMp3(fileName) // Convert the mp4 file to mp3 using ffmpeg
 
 	time.Sleep(5 * time.Second) // wiat 5 seconds ( Prevent the YouTube server from boring me
 }
