@@ -7,27 +7,32 @@ Este é um aplicativo em Go que permite baixar músicas do YouTube. Siga as inst
 - Go 1.16 ou superior
 - Uma conta no YouTube
 
-## Instalação
+## Download
 
-1. Clone o repositório:
+Baixe o binário apropriado para o seu sistema operacional:
 
-2. Navegue até o diretório do projeto clonado:
-
-3. Execute o aplicativo:
-
-```
-go run main.go
-```
+- [Linux](https://github.com/seu_usuario/seu_repositorio/releases/latest/download/youtube_downloader_linux)
+- [macOS](https://github.com/seu_usuario/seu_repositorio/releases/latest/download/youtube_downloader_macos)
+- [Windows](https://github.com/seu_usuario/seu_repositorio/releases/latest/download/youtube_downloader_windows.exe)
 
 ## Uso
 
-1. Execute o aplicativo:
+Após baixar o binário:
 
-2. Escolha 1 para baixar uma música ou 2 para baixar uma playlist.
+### Linux e macOS
+1. Abra o terminal e navegue até o diretório do download.
+2. Dê permissão de execução:
+   ```
+   chmod +x youtube_downloader_linux   # ou youtube_downloader_macos
+   ```
+3. Execute:
+   ```
+   ./youtube_downloader_linux   # ou ./youtube_downloader_macos
+   ```
 
-3. Insira o URL da música ou da playlist que deseja baixar.
-
-4. O aplicativo baixará a música ou a playlist selecionada.
+### Windows
+1. Localize o arquivo baixado (youtube_downloader_windows.exe).
+2. Dê um duplo clique para executar ou use o Prompt de Comando.
 
 ## Contribuição
 
