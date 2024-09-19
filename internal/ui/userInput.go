@@ -24,6 +24,9 @@ func UserInterface(client *youtube.Client) {
 	case 3:
 		handleCleanFiles()
 		fmt.Println("Removing files ...")
+	case 4:
+		managerfiles.MoveFilesToFolderInHomeSystem("musics")
+		fmt.Println("Moving files ...")
 	default:
 		fmt.Println("Invalid option")
 	}
@@ -49,6 +52,7 @@ func userJoice() {
 	fmt.Println("1. Download single video")
 	fmt.Println("2. Download playlist")
 	fmt.Println("3.Clean all files from musics folder")
+	fmt.Println(`4. Move File to download`)
 }
 
 func InputUserOption() int {

@@ -47,3 +47,21 @@ func CleanVideoMp3Folder() {
 	}
 
 }
+
+func MoveFilesToFolderInHomeSystem(nameFolder ...string) {
+	homeDir, err := os.UserHomeDir()
+	destination := filepath.Join(homeDir, "Downloads", nameFolder[0])
+
+	if err != nil {
+		log.Fatalf("Error with get home dir : %v", err)
+	}
+
+	err = os.Rename("musics", destination)
+
+	if err != nil {
+		log.Fatalf("Error with move files : %v", err)
+	}
+
+	log.Println("Movido files com sucesos!")
+
+}
