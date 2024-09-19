@@ -5,6 +5,7 @@ import (
 	"log"
 	"strings"
 
+	managerfiles "github.com/TalesPalma/internal/managerFiles"
 	youtubev2services "github.com/TalesPalma/internal/youtubev2Services"
 	"github.com/kkdai/youtube/v2"
 )
@@ -20,9 +21,16 @@ func UserInterface(client *youtube.Client) {
 	case 2:
 		fmt.Println("Digite sua url:")
 		handleDownloadPlaylist(client)
+	case 3:
+		handleCleanFiles()
+		fmt.Println("Removing files ...")
 	default:
 		fmt.Println("Invalid option")
 	}
+}
+
+func handleCleanFiles() {
+	managerfiles.CleanVideoMp3Folder()
 }
 
 func handleDownloadSingleVideo(client *youtube.Client) {
@@ -40,6 +48,7 @@ func handleDownloadPlaylist(client *youtube.Client) {
 func userJoice() {
 	fmt.Println("1. Download single video")
 	fmt.Println("2. Download playlist")
+	fmt.Println("3.Clean all files from musics folder")
 }
 
 func InputUserOption() int {

@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"os"
 	"time"
 
 	"github.com/TalesPalma/internal/converters"
+	managerfiles "github.com/TalesPalma/internal/managerFiles"
 	"github.com/kkdai/youtube/v2"
 )
 
@@ -45,19 +45,7 @@ func SingleVideoDownload(video *youtube.Video, client *youtube.Client) {
 // Save the video
 func saveVideoMp3(video *youtube.Video, response io.ReadCloser) {
 	fileName := video.Title + ".mp4"
-
-	file, err := os.Create("musics/" + fileName)
-	if err != nil {
-		log.Fatalf("Error with create file : %v", err)
-	}
-	defer file.Close()
-
-	_, err = file.ReadFrom(response)
-	if err != nil {
-		log.Fatalf("Error with read file : %v", err)
-	}
-
-	go converters.ConvertMp4ToMp3(fileName) // Convert the mp4 file to mp3 using ffmpeg
-
-	time.Sleep(5 * time.Second) // wiat 5 seconds ( Prevent the YouTube server from boring me
+	managerfiles.SaveVideoMp3File(video, response, fileName) // Save the mp4 file
+	go converters.ConvertMp4ToMp3(fileName)                  // Convert the mp4 file to mp3 using ffmpeg
+	time.Sleep(5 * time.Second)                              // wiat 5 seconds ( Prevent the YouTube server from boring me )
 }
