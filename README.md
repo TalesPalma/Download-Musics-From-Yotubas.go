@@ -6,6 +6,7 @@ Este é um aplicativo em Go que permite baixar músicas do YouTube. Siga as inst
 
 - Go 1.16 ou superior
 - Uma conta no YouTube
+- ffmpeg https://www.ffmpeg.org/download.html
 
 ## Download
 
