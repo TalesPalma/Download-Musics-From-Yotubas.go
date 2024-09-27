@@ -1,5 +1,5 @@
 package models
 
-type Link struct {
-	Link string `json:"link" binding:"required"`
+type PlaylistLink struct {
+	Link string `json:"playlist_url" binding:"required"`
 }

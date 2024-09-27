@@ -6,8 +6,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/TalesPalma/internal/MotorDonwload/converters"
-	managerfiles "github.com/TalesPalma/internal/MotorDonwload/managerFiles"
+	"github.com/TalesPalma/internal/MotorDownload/converters"
+	managerfiles "github.com/TalesPalma/internal/MotorDownload/managerFiles"
 	"github.com/TalesPalma/internal/models"
 	"github.com/kkdai/youtube/v2"
 )
