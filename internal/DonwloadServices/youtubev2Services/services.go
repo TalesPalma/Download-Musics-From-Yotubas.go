@@ -8,11 +8,20 @@ import (
 
 	"github.com/TalesPalma/internal/DonwloadServices/converters"
 	managerfiles "github.com/TalesPalma/internal/DonwloadServices/managerFiles"
+	"github.com/TalesPalma/internal/models"
 	"github.com/kkdai/youtube/v2"
 )
 
+func GetClient() *youtube.Client {
+	return &youtube.Client{}
+}
+
 // Download a playlist
-func DownloadPlaylist(url string, client *youtube.Client) {
+func DownloadPlaylist(
+	url string,
+	client *youtube.Client,
+	listMusics *[]models.Music,
+) {
 	playlist, err := client.GetPlaylist(url)
 	if err != nil {
 		log.Fatalf("Error with get playlist : %v", err)
@@ -24,6 +33,9 @@ func DownloadPlaylist(url string, client *youtube.Client) {
 			log.Fatalf("Error with get video : %v", err)
 		}
 		SingleVideoDownload(video, client)
+		*listMusics = append(*listMusics, models.Music{
+			Title: video.Title,
+		})
 	}
 }
 
