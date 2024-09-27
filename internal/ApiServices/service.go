@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	youtubev2services "github.com/TalesPalma/internal/DonwloadServices/youtubev2Services"
+	youtubev2services "github.com/TalesPalma/internal/MotorDonwload/youtubev2Services"
 	"github.com/TalesPalma/internal/models"
 	"github.com/gin-gonic/gin"
 )
