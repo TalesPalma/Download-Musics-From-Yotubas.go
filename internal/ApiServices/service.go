@@ -13,6 +13,7 @@ var ListMusics []models.Music //Vai add musicas a serem baixadas
 func Handler(r *gin.Engine) {
 	r.GET("/musics", GetMusicsInDonwload)
 	r.POST("/download", PostDownloadPlaylist)
+	r.GET("/download/:musicName", getDownloadMusic) //A gente manda o title da musica para o get e pronto já vai puchar o donwload
 }
 
 func GetMusicsInDonwload(c *gin.Context) {
@@ -25,6 +26,17 @@ func PostDownloadPlaylist(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	youtubev2services.DownloadPlaylist(linkPlaylist.Link, youtubev2services.GetClient(), &ListMusics)
+	go youtubev2services.DownloadPlaylist(linkPlaylist.Link, youtubev2services.GetClient(), &ListMusics)
 	c.JSON(http.StatusOK, gin.H{"Message": "Download inicado para " + linkPlaylist.Link})
+}
+
+func getDownloadMusic(c *gin.Context) {
+	link := c.Param("musicName")
+	music := link + ".mp3"
+	filePath := "musics/" + music
+
+	c.Header("Content-Disposition", "attachment; filename="+music)
+	c.Header("Content-Type", "audio/mpeg")
+	c.File(filePath)
+
 }
