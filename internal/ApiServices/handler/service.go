@@ -43,6 +43,7 @@ func wsHandle(c *gin.Context) {
 		case newMusics := <-Broadcast: // Escuta o canal de broadcasta ou seja quando algo for atualizado na lista
 			//Envia a nova lista de musicas para o client
 			if err := conn.WriteJSON(newMusics); err != nil {
+				delete(clients, conn)
 				break
 			}
 		}
@@ -62,12 +63,13 @@ func PostDownloadPlaylist(c *gin.Context) {
 
 	go func() {
 		// Baixar musicas
+		// Envia a lista de musicas para o canal Broadcast
+		// Broadcast <- ListMusics
 		youtubev2services.DownloadPlaylist(linkPlaylist.Link, youtubev2services.GetClient(), &ListMusics)
-		// Notifique os cliente conectados
 		Broadcast <- ListMusics
 	}()
 
-	c.JSON(http.StatusOK, gin.H{"Message": "Download inicado para " + linkPlaylist.Link})
+	c.JSON(http.StatusOK, gin.H{"Message": "Download iniciado para " + linkPlaylist.Link})
 }
 
 func getDownloadMusic(c *gin.Context) {
