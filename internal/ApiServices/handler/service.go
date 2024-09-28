@@ -37,6 +37,7 @@ func wsHandle(c *gin.Context) {
 		delete(clients, conn)
 		conn.Close()
 	}()
+	clients[conn] = true
 	for {
 		select {
 		case newMusics := <-Broadcast: // Escuta o canal de broadcasta ou seja quando algo for atualizado na lista
