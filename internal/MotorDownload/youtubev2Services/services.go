@@ -49,6 +49,7 @@ func SingleVideoDownload(video *youtube.Video, client *youtube.Client) {
 		log.Fatalf("Error with get stream : %v", error)
 	}
 	defer response.Close()
+
 	saveVideoMp3(video, response)
 
 	fmt.Println("Download completed!")
