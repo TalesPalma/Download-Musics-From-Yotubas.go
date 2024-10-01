@@ -21,6 +21,7 @@ func DownloadPlaylist(
 	url string,
 	client *youtube.Client,
 	listMusics *[]models.Music,
+	broadcast *chan []models.Music,
 ) {
 	playlist, err := client.GetPlaylist(url)
 	if err != nil {
@@ -36,6 +37,7 @@ func DownloadPlaylist(
 		*listMusics = append(*listMusics, models.Music{
 			Title: video.Title,
 		})
+		*broadcast <- *listMusics
 	}
 }
 

@@ -9,7 +9,6 @@ import (
 )
 
 func ConvertMp4ToMp3(mp4FileName string) {
-
 	path := "musics"
 	inputFile := filepath.Join(path, mp4FileName)
 	outputFile := filepath.Join(path, mp4FileName[0:len(mp4FileName)-4]) + ".mp3" // Remove .mp4 add mp3 extension

@@ -1,8 +1,10 @@
 package handler
 
 import (
+	"log"
 	"net/http"
 
+	managerfiles "github.com/TalesPalma/internal/MotorDownload/managerFiles"
 	youtubev2services "github.com/TalesPalma/internal/MotorDownload/youtubev2Services"
 	"github.com/TalesPalma/internal/models"
 	"github.com/gin-gonic/gin"
@@ -39,11 +41,28 @@ func wsHandle(c *gin.Context) {
 	}()
 	clients[conn] = true
 	for {
+
+		_, message, err := conn.ReadMessage()
+
+		if err != nil {
+			log.Println("read:", err)
+			break
+		}
+		log.Printf("recv: %s", string(message))
+
+		if string(message) == "clear" {
+			ListMusics = []models.Music{}
+			Broadcast = make(chan []models.Music)
+			managerfiles.CleanVideoMp3Folder()
+			log.Println("Limpou a pasta")
+		}
+
 		select {
 		case newMusics := <-Broadcast: // Escuta o canal de broadcasta ou seja quando algo for atualizado na lista
 			//Envia a nova lista de musicas para o client
 			if err := conn.WriteJSON(newMusics); err != nil {
 				delete(clients, conn)
+				log.Fatal(err)
 				break
 			}
 		}
@@ -61,13 +80,8 @@ func PostDownloadPlaylist(c *gin.Context) {
 		return
 	}
 
-	go func() {
-		// Baixar musicas
-		// Envia a lista de musicas para o canal Broadcast
-		// Broadcast <- ListMusics
-		youtubev2services.DownloadPlaylist(linkPlaylist.Link, youtubev2services.GetClient(), &ListMusics)
-		Broadcast <- ListMusics
-	}()
+	// Baixar musicas
+	go youtubev2services.DownloadPlaylist(linkPlaylist.Link, youtubev2services.GetClient(), &ListMusics, &Broadcast)
 
 	c.JSON(http.StatusOK, gin.H{"Message": "Download iniciado para " + linkPlaylist.Link})
 }
