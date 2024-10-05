@@ -81,8 +81,7 @@ func PostDownloadPlaylist(c *gin.Context) {
 	}
 
 	// Baixar musicas
-	go youtubev2services.DownloadPlaylist(linkPlaylist.Link, youtubev2services.GetClient(), &ListMusics, &Broadcast)
-
+	youtubev2services.DownloadPlaylist(linkPlaylist.Link, youtubev2services.GetClient(), &ListMusics, &Broadcast)
 	c.JSON(http.StatusOK, gin.H{"Message": "Download iniciado para " + linkPlaylist.Link})
 }
 

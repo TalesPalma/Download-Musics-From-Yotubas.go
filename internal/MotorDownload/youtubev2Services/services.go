@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"time"
 
 	"github.com/TalesPalma/internal/MotorDownload/converters"
 	managerfiles "github.com/TalesPalma/internal/MotorDownload/managerFiles"
@@ -37,7 +36,9 @@ func DownloadPlaylist(
 		*listMusics = append(*listMusics, models.Music{
 			Title: video.Title,
 		})
-		*broadcast <- *listMusics
+
+		// *broadcast <- *listMusics // Isso quebrour a concorrencia e fez travar o donwload em 1 musicas
+
 	}
 }
 
@@ -61,6 +62,6 @@ func SingleVideoDownload(video *youtube.Video, client *youtube.Client) {
 func saveVideoMp3(video *youtube.Video, response io.ReadCloser) {
 	fileName := video.Title + ".mp4"
 	managerfiles.SaveVideoMp3File(video, response, fileName) // Save the mp4 file
-	go converters.ConvertMp4ToMp3(fileName)                  // Convert the mp4 file to mp3 using ffmpeg
-	time.Sleep(5 * time.Second)                              // wiat 5 seconds ( Prevent the YouTube server from boring me )
+	converters.ConvertMp4ToMp3(fileName)                     // Convert the mp4 file to mp3 using ffmpeg
+	// time.Sleep(5 * time.Second)                              // wiat 5 seconds ( Prevent the YouTube server from boring me )
 }
