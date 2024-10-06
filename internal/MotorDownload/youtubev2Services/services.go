@@ -33,10 +33,11 @@ func DownloadPlaylist(
 			log.Fatalf("Error with get video : %v", err)
 		}
 
-		SingleVideoDownload(video, client)
+		var fileName string
+		SingleVideoDownload(video, client, &fileName)
 
 		*listMusics = append(*listMusics, models.Music{
-			Title: video.Title,
+			Title: fileName,
 		})
 
 		*broadcast <- *listMusics // Isso quebrour a concorrencia e fez travar o donwload em 1 musicas
@@ -45,7 +46,7 @@ func DownloadPlaylist(
 }
 
 // Download a single video
-func SingleVideoDownload(video *youtube.Video, client *youtube.Client) {
+func SingleVideoDownload(video *youtube.Video, client *youtube.Client, fileName *string) {
 	fmt.Println("Downloading ", video.Title, "...")
 
 	formats := video.Formats.WithAudioChannels()
@@ -55,15 +56,16 @@ func SingleVideoDownload(video *youtube.Video, client *youtube.Client) {
 	}
 	defer response.Close()
 
-	saveVideoMp3(video, response)
+	saveVideoMp3(video, response, fileName)
 
 	fmt.Println("Download completed!")
 }
 
 // Save the video
-func saveVideoMp3(video *youtube.Video, response io.ReadCloser) {
-	fileName := video.Title + ".mp4"
+func saveVideoMp3(video *youtube.Video, response io.ReadCloser, fileName *string) {
+	*fileName = video.Title + ".mp3"                                   // Fica de zoio
 	managerfiles.SaveVideoMp3FileAndConvert(video, response, fileName) // Save the mp4 file
 	// converters.ConvertMp4ToMp3(fileName)                               // Convert the mp4 file to mp3 using ffmpeg
 	time.Sleep(5 * time.Second) // wiat 5 seconds ( Prevent the YouTube server from boring me )
+
 }

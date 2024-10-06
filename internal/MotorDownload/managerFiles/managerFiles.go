@@ -8,11 +8,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/TalesPalma/internal/MotorDownload/converters"
 	"github.com/kkdai/youtube/v2"
 )
 
-func SaveVideoMp3FileAndConvert(video *youtube.Video, response io.ReadCloser, fileName string) {
+func SaveVideoMp3FileAndConvert(video *youtube.Video, response io.ReadCloser, fileName *string) {
 
 	//Cria a pasta musics caso ela não exista
 	err := os.MkdirAll("musics/", os.ModePerm)
@@ -21,10 +20,10 @@ func SaveVideoMp3FileAndConvert(video *youtube.Video, response io.ReadCloser, fi
 	}
 
 	//Sanitizar o nome do arquivo
-	fileName = SanitizeFileName(fileName)
+	SanitizeFileName(fileName)
 
 	//Caso a pasta musics exista, salva o arquivo
-	file, err := os.Create("musics/" + fileName)
+	file, err := os.Create("musics/" + *fileName)
 	if err != nil {
 		log.Fatalf("Error with create file : %v", err)
 	}
@@ -36,18 +35,15 @@ func SaveVideoMp3FileAndConvert(video *youtube.Video, response io.ReadCloser, fi
 		log.Fatalf("Error with read file : %v", err)
 	}
 
-	log.Println("Salvou com sucesso o aruivo" + fileName)
-
-	converters.ConvertMp4ToMp3(fileName) // Convert the mp4 file to mp3 using ffmpeg
+	log.Println("Salvou com sucesso o arquivo" + *fileName)
 
 }
 
-func SanitizeFileName(fileName string) string {
+func SanitizeFileName(fileName *string) {
 	invalidChars := []string{"\\", "/", ":", "*", "?", "\"", "<", ">", "|"}
 	for _, chars := range invalidChars {
-		fileName = strings.ReplaceAll(fileName, chars, "_")
+		*fileName = strings.ReplaceAll(*fileName, chars, "_")
 	}
-	return fileName
 }
 
 func CleanVideoMp3Folder() {
