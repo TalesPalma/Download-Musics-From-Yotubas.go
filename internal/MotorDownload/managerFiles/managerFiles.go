@@ -6,17 +6,22 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
+	"github.com/TalesPalma/internal/MotorDownload/converters"
 	"github.com/kkdai/youtube/v2"
 )
 
-func SaveVideoMp3File(video *youtube.Video, response io.ReadCloser, fileName string) {
+func SaveVideoMp3FileAndConvert(video *youtube.Video, response io.ReadCloser, fileName string) {
 
 	//Cria a pasta musics caso ela não exista
 	err := os.MkdirAll("musics/", os.ModePerm)
 	if err != nil {
 		log.Fatalf("Error with create folder : %v", err)
 	}
+
+	//Sanitizar o nome do arquivo
+	fileName = SanitizeFileName(fileName)
 
 	//Caso a pasta musics exista, salva o arquivo
 	file, err := os.Create("musics/" + fileName)
@@ -32,6 +37,17 @@ func SaveVideoMp3File(video *youtube.Video, response io.ReadCloser, fileName str
 	}
 
 	log.Println("Salvou com sucesso o aruivo" + fileName)
+
+	converters.ConvertMp4ToMp3(fileName) // Convert the mp4 file to mp3 using ffmpeg
+
+}
+
+func SanitizeFileName(fileName string) string {
+	invalidChars := []string{"\\", "/", ":", "*", "?", "\"", "<", ">", "|"}
+	for _, chars := range invalidChars {
+		fileName = strings.ReplaceAll(fileName, chars, "_")
+	}
+	return fileName
 }
 
 func CleanVideoMp3Folder() {

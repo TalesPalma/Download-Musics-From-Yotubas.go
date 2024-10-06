@@ -19,7 +19,7 @@ var (
 		},
 	}
 	clients   = make(map[*websocket.Conn]bool)
-	Broadcast = make(chan []models.Music) //Vai add musicas a serem baixadas
+	broadcast = make(chan []models.Music, 10) //Vai add musicas a serem baixadas
 )
 
 func Handler(r *gin.Engine) {
@@ -52,20 +52,18 @@ func wsHandle(c *gin.Context) {
 
 		if string(message) == "clear" {
 			ListMusics = []models.Music{}
-			Broadcast = make(chan []models.Music)
 			managerfiles.CleanVideoMp3Folder()
 			log.Println("Limpou a pasta")
 		}
 
-		select {
-		case newMusics := <-Broadcast: // Escuta o canal de broadcasta ou seja quando algo for atualizado na lista
-			//Envia a nova lista de musicas para o client
-			if err := conn.WriteJSON(newMusics); err != nil {
-				delete(clients, conn)
-				log.Fatal(err)
-				break
-			}
+		// Escuta o canal de broadcasta ou seja quando algo for atualizado na lista
+		newMusics := <-broadcast
+		//Envia a nova lista de musicas para o client
+		if err := conn.WriteJSON(newMusics); err != nil {
+			delete(clients, conn)
+			log.Fatal(err)
 		}
+
 	}
 }
 
@@ -81,7 +79,7 @@ func PostDownloadPlaylist(c *gin.Context) {
 	}
 
 	// Baixar musicas
-	youtubev2services.DownloadPlaylist(linkPlaylist.Link, youtubev2services.GetClient(), &ListMusics, &Broadcast)
+	youtubev2services.DownloadPlaylist(linkPlaylist.Link, youtubev2services.GetClient(), &ListMusics, &broadcast)
 	c.JSON(http.StatusOK, gin.H{"Message": "Download iniciado para " + linkPlaylist.Link})
 }
 

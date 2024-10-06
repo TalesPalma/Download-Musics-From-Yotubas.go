@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"time"
 
-	"github.com/TalesPalma/internal/MotorDownload/converters"
 	managerfiles "github.com/TalesPalma/internal/MotorDownload/managerFiles"
 	"github.com/TalesPalma/internal/models"
 	"github.com/kkdai/youtube/v2"
@@ -32,12 +32,14 @@ func DownloadPlaylist(
 		if err != nil {
 			log.Fatalf("Error with get video : %v", err)
 		}
+
 		SingleVideoDownload(video, client)
+
 		*listMusics = append(*listMusics, models.Music{
 			Title: video.Title,
 		})
 
-		// *broadcast <- *listMusics // Isso quebrour a concorrencia e fez travar o donwload em 1 musicas
+		*broadcast <- *listMusics // Isso quebrour a concorrencia e fez travar o donwload em 1 musicas
 
 	}
 }
@@ -61,7 +63,7 @@ func SingleVideoDownload(video *youtube.Video, client *youtube.Client) {
 // Save the video
 func saveVideoMp3(video *youtube.Video, response io.ReadCloser) {
 	fileName := video.Title + ".mp4"
-	managerfiles.SaveVideoMp3File(video, response, fileName) // Save the mp4 file
-	converters.ConvertMp4ToMp3(fileName)                     // Convert the mp4 file to mp3 using ffmpeg
-	// time.Sleep(5 * time.Second)                              // wiat 5 seconds ( Prevent the YouTube server from boring me )
+	managerfiles.SaveVideoMp3FileAndConvert(video, response, fileName) // Save the mp4 file
+	// converters.ConvertMp4ToMp3(fileName)                               // Convert the mp4 file to mp3 using ffmpeg
+	time.Sleep(5 * time.Second) // wiat 5 seconds ( Prevent the YouTube server from boring me )
 }
