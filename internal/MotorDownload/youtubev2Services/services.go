@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"time"
 
 	managerfiles "github.com/TalesPalma/internal/MotorDownload/managerFiles"
 	"github.com/TalesPalma/internal/models"
@@ -63,9 +62,7 @@ func SingleVideoDownload(video *youtube.Video, client *youtube.Client, fileName 
 
 // Save the video
 func saveVideoMp3(video *youtube.Video, response io.ReadCloser, fileName *string) {
-	*fileName = video.Title + ".mp3"                                   // Fica de zoio
-	managerfiles.SaveVideoMp3FileAndConvert(video, response, fileName) // Save the mp4 file
-	// converters.ConvertMp4ToMp3(fileName)                               // Convert the mp4 file to mp3 using ffmpeg
-	time.Sleep(5 * time.Second) // wiat 5 seconds ( Prevent the YouTube server from boring me )
+	*fileName = video.Title + ".mp4"                         // Fica de zoio
+	managerfiles.SaveVideoMp3File(video, response, fileName) // Save the mp4 file
 
 }
